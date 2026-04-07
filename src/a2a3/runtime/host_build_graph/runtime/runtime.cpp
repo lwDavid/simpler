@@ -48,6 +48,7 @@ Runtime::Runtime() {
     orch_thread_num = 1;
     enable_profiling = false;
     perf_data_base = 0;
+    ffts_base_addr = 0;
     tensor_pair_count = 0;
 
     // Initialize kernel binary tracking

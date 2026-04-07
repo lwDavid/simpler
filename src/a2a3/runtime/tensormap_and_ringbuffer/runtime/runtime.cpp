@@ -39,6 +39,8 @@ Runtime::Runtime() {
     pto2_heap_size = 0;
     pto2_dep_pool_size = 0;
     orch_to_sched = false;
+    perf_data_base = 0;
+    ffts_base_addr = 0;
 
     // Initialize tensor pairs
     tensor_pair_count = 0;

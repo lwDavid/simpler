@@ -471,16 +471,20 @@ int DeviceRunner::run(
     });
 
     std::cout << "\n=== Initialize runtime args ===" << '\n';
-    // Initialize runtime args
-    rc = kernel_args_.init_runtime_args(runtime, mem_alloc_);
-    if (rc != 0) {
-        LOG_ERROR("init_runtime_args failed: %d", rc);
-        return rc;
-    }
 
+    // Get FFTS base address and store in Runtime (for AICPU → AICore dispatch payload)
     rc = kernel_args_.init_ffts_base_addr();
     if (rc != 0) {
         LOG_ERROR("init_ffts_base_addr failed: %d", rc);
+        return rc;
+    }
+    runtime.ffts_base_addr = kernel_args_.args.ffts_base_addr;
+    LOG_INFO("ffts_base_addr = 0x%lx", runtime.ffts_base_addr);
+
+    // Copy Runtime to device (includes ffts_base_addr)
+    rc = kernel_args_.init_runtime_args(runtime, mem_alloc_);
+    if (rc != 0) {
+        LOG_ERROR("init_runtime_args failed: %d", rc);
         return rc;
     }
 

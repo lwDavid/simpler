@@ -88,6 +88,16 @@ __aicore__ __attribute__((weak)) void aicore_execute(__gm__ Runtime *runtime, in
     // Cache per-core dispatch payload pointer (set by AICPU before aicpu_ready)
     __gm__ PTO2DispatchPayload *payload = reinterpret_cast<__gm__ PTO2DispatchPayload *>(my_hank->task);
 
+#ifndef __CPU_SIM
+    // FFTS base address is initialized once by AICPU and remains constant for
+    // the lifetime of this AICore kernel. Cache it once outside the hot loop.
+    dcci(&payload->ffts_base_addr, SINGLE_CACHE_LINE);
+    uint64_t ffts_base_addr = payload->ffts_base_addr;
+    if (ffts_base_addr != 0) {
+        set_ffts_base_addr(ffts_base_addr);
+    }
+#endif
+
     bool profiling_enabled = runtime->enable_profiling;
 
     // Phase 4: Main execution loop - poll register for tasks until exit signal

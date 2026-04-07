@@ -205,6 +205,7 @@ public:
     // Profiling support
     bool enable_profiling;    // Enable profiling flag
     uint64_t perf_data_base;  // Performance data shared memory base address (device-side)
+    uint64_t ffts_base_addr;  // FFTS base address for AICore set_ffts_base_addr() (cross-core pipe)
 
     // Task storage
     Task tasks[RUNTIME_MAX_TASKS];  // Fixed-size task array

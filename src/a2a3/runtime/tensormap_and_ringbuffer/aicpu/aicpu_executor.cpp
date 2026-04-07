@@ -1188,6 +1188,12 @@ int32_t AicpuExecutor::init(Runtime *runtime) {
     // Clear per-core dispatch payloads
     memset(s_pto2_payload_per_core, 0, sizeof(s_pto2_payload_per_core));
 
+    // Propagate ffts_base_addr from Runtime to all dispatch payloads
+    // so AICore can call set_ffts_base_addr before each per-task kernel.
+    for (int32_t i = 0; i < RUNTIME_MAX_WORKER; i++) {
+        s_pto2_payload_per_core[i].ffts_base_addr = runtime->ffts_base_addr;
+    }
+
     // Initialize per-core GlobalContext (sub_block_id) based on cluster position.
     // This is done once at startup and never modified afterwards.
     for (int32_t t = 0; t < sched_thread_num_; t++) {

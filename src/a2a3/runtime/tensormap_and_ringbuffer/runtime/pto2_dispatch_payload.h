@@ -70,6 +70,7 @@ static_assert(
 struct alignas(64) PTO2DispatchPayload {
     uint64_t function_bin_addr;            /**< Kernel entry address in GM (set by Scheduler) */
     uint64_t args[PTO2_DISPATCH_MAX_ARGS]; /**< Kernel arguments (GM pointers + scalars + ext params) */
+    uint64_t ffts_base_addr;               /**< FFTS base address for cross-core pipe (set once at init) */
 
     /** Per-dispatch context: block_idx and block_num.
      *  Written by build_payload() before each dispatch.
